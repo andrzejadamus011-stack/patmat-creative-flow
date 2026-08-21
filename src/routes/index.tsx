@@ -163,7 +163,7 @@ function Hero() {
           alt="Pat&Mat.corp — creative studio marketingowe"
           width={1960}
           height={780}
-          className="h-auto w-full"
+          className="h-auto w-full mix-blend-multiply"
         />
       </div>
       <p
@@ -293,13 +293,13 @@ function Services() {
 
       <div className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
         {SERVICES.map((s, i) => (
-          <Reveal key={s.title} delay={i * 60} className="bg-background">
-            <div className="h-full p-8 transition-colors hover:bg-secondary">
+          <div key={s.title} className="bg-background">
+            <Reveal delay={i * 60} className="h-full p-8 transition-colors hover:bg-secondary">
               <s.icon className="h-5 w-5 text-accent" />
               <h3 className="mt-6 font-display text-lg font-semibold">{s.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         ))}
       </div>
     </section>
