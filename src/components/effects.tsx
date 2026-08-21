@@ -130,3 +130,88 @@ export function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
     </span>
   );
 }
+
+/** Postęp przewijania całej strony 0→1. */
+export function useScrollP() {
+  const [p, setP] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        setP(h > 0 ? Math.min(Math.max(window.scrollY / h, 0), 1) : 0);
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+  return p;
+}
+
+/**
+ * Nierówna linia jak pociągnięcie pędzlem, która przelatuje przez tło
+ * całej strony w trakcie przewijania.
+ */
+export function BrushTrail() {
+  const p = useScrollP();
+  const LEN = 4200;
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <svg
+        className="absolute left-0 top-0 h-full w-full"
+        viewBox="0 0 1000 1000"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <filter id="brush-rough">
+            <feTurbulence type="fractalNoise" baseFrequency="0.02 0.06" numOctaves="3" seed="7" />
+            <feDisplacementMap in="SourceGraphic" scale="16" />
+          </filter>
+          <linearGradient id="brush-grad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="var(--marker)" stopOpacity="0.15" />
+            <stop offset="50%" stopColor="var(--marker)" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="var(--copper)" stopOpacity="0.35" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M -80 180 C 240 60, 380 320, 620 240 S 980 120, 1120 300"
+          fill="none"
+          stroke="url(#brush-grad)"
+          strokeWidth="26"
+          strokeLinecap="round"
+          filter="url(#brush-rough)"
+          style={{
+            strokeDasharray: LEN,
+            strokeDashoffset: LEN * (1 - Math.min(p * 2.2, 1)),
+            transform: `translateY(${p * 620}px) rotate(${-2 + p * 6}deg)`,
+            transformOrigin: "50% 50%",
+            transition: "stroke-dashoffset 200ms linear, transform 200ms linear",
+            opacity: 0.55,
+          }}
+        />
+        <path
+          d="M 1120 620 C 860 700, 700 480, 460 600 S 120 780, -60 660"
+          fill="none"
+          stroke="var(--marker)"
+          strokeWidth="14"
+          strokeLinecap="round"
+          filter="url(#brush-rough)"
+          style={{
+            strokeDasharray: LEN,
+            strokeDashoffset: LEN * (1 - Math.max(0, Math.min((p - 0.25) * 2, 1))),
+            transform: `translateY(${-p * 420}px)`,
+            transition: "stroke-dashoffset 200ms linear, transform 200ms linear",
+            opacity: 0.4,
+          }}
+        />
+      </svg>
+    </div>
+  );
+}
