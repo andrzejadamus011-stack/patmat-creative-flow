@@ -280,3 +280,58 @@ export function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
     </span>
   );
 }
+
+/** Planeta z logo, która płynie i obraca się w trakcie przewijania strony. */
+export function ScrollPlanet({ src }: { src: string }) {
+  const [p, setP] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        setP(h > 0 ? window.scrollY / h : 0);
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const t = Math.min(Math.max(p, 0), 1);
+  const top = 12 + t * 66; // vh
+  const drift = Math.sin(t * Math.PI * 2) * 46; // px
+  const scale = 0.85 + Math.sin(t * Math.PI) * 0.5;
+
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none fixed right-2 z-20 hidden md:block"
+      style={{
+        top: `${top}vh`,
+        transform: `translate3d(${drift}px, -50%, 0) scale(${scale})`,
+        transition: "transform 200ms linear, top 200ms linear",
+      }}
+    >
+      <div className="relative h-28 w-28">
+        <div
+          className="absolute inset-[-38%] rounded-full blur-2xl"
+          style={{
+            background:
+              "radial-gradient(circle, color-mix(in oklab, var(--iris) 45%, transparent), transparent 70%)",
+            opacity: 0.5 + t * 0.4,
+          }}
+        />
+        <img
+          src={src}
+          alt=""
+          className="relative h-full w-full rounded-full object-cover mix-blend-screen opacity-80"
+          style={{ transform: `rotate(${t * 540}deg)` }}
+        />
+      </div>
+    </div>
+  );
+}
