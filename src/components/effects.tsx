@@ -104,7 +104,7 @@ export function ParticleField() {
         if (p.y < 0 || p.y > h) p.vy *= -1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(200,190,255,0.55)";
+        ctx.fillStyle = "rgba(214,178,142,0.55)";
         ctx.fill();
       }
       for (let i = 0; i < pts.length; i++) {
@@ -116,7 +116,7 @@ export function ParticleField() {
           const d2 = dx * dx + dy * dy;
           if (d2 < 15000) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(150,140,255,${(1 - d2 / 15000) * 0.22})`;
+            ctx.strokeStyle = `rgba(190,140,100,${(1 - d2 / 15000) * 0.26})`;
             ctx.lineWidth = 0.7;
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -278,5 +278,60 @@ export function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
       {val}
       {suffix}
     </span>
+  );
+}
+
+/** Planeta z logo, która płynie i obraca się w trakcie przewijania strony. */
+export function ScrollPlanet({ src }: { src: string }) {
+  const [p, setP] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        setP(h > 0 ? window.scrollY / h : 0);
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const t = Math.min(Math.max(p, 0), 1);
+  const top = 12 + t * 66; // vh
+  const drift = Math.sin(t * Math.PI * 2) * 46; // px
+  const scale = 0.85 + Math.sin(t * Math.PI) * 0.5;
+
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none fixed right-2 z-20 hidden md:block"
+      style={{
+        top: `${top}vh`,
+        transform: `translate3d(${drift}px, -50%, 0) scale(${scale})`,
+        transition: "transform 200ms linear, top 200ms linear",
+      }}
+    >
+      <div className="relative h-28 w-28">
+        <div
+          className="absolute inset-[-38%] rounded-full blur-2xl"
+          style={{
+            background:
+              "radial-gradient(circle, color-mix(in oklab, var(--iris) 45%, transparent), transparent 70%)",
+            opacity: 0.5 + t * 0.4,
+          }}
+        />
+        <img
+          src={src}
+          alt=""
+          className="relative h-full w-full rounded-full object-cover mix-blend-screen opacity-80"
+          style={{ transform: `rotate(${t * 540}deg)` }}
+        />
+      </div>
+    </div>
   );
 }
