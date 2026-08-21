@@ -109,8 +109,8 @@ export function ParticleField() {
       }
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
-          const a = pts[i];
-          const b = pts[j];
+          const a = pts[i]!;
+          const b = pts[j]!;
           const dx = a.x - b.x;
           const dy = a.y - b.y;
           const d2 = dx * dx + dy * dy;
@@ -257,7 +257,7 @@ export function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
     if (!el) return;
     const io = new IntersectionObserver(
       ([e]) => {
-        if (!e.isIntersecting) return;
+        if (!e?.isIntersecting) return;
         io.disconnect();
         const start = performance.now();
         const dur = 1600;
