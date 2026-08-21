@@ -122,7 +122,7 @@ function Nav() {
           href="#top"
           className="flex items-center gap-2 px-3 font-display text-sm font-semibold tracking-tight"
         >
-          <span className="bg-iris h-6 w-6 rounded-lg" />
+          <span className="bg-iris h-6 w-6 shrink-0 rounded-lg" />
           Pat&amp;Mat<span className="text-muted-foreground">.corp</span>
         </a>
         <ul className="hidden items-center gap-1 md:flex">
@@ -160,7 +160,7 @@ function Hero() {
   }, []);
 
   return (
-    <section id="top" className="noise relative min-h-screen overflow-hidden pt-36">
+    <section id="top" className="noise relative overflow-hidden pb-24 pt-40">
       <div className="absolute inset-0">
         <div
           className="animate-float-slow absolute -left-40 top-10 h-[560px] w-[560px] rounded-full blur-3xl"
