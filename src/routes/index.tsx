@@ -152,10 +152,11 @@ function Hero() {
       className="relative flex min-h-screen flex-col items-center justify-center px-6"
     >
       <div
-        className="w-full max-w-3xl"
+        className="w-full max-w-3xl overflow-hidden rounded-[2rem]"
         style={{
           opacity: 1 - p,
           transform: `translateY(${p * -40}px) scale(${1 - p * 0.06})`,
+          background: "oklch(0.968 0.008 85)",
         }}
       >
         <img
@@ -163,9 +164,10 @@ function Hero() {
           alt="Pat&Mat.corp — creative studio marketingowe"
           width={1960}
           height={780}
-          className="h-auto w-full mix-blend-multiply"
+          className="h-auto w-full"
         />
       </div>
+
       <p
         className="mt-10 text-center font-mono text-[11px] uppercase tracking-[0.4em] text-muted-foreground"
         style={{ opacity: 1 - p * 1.4 }}
