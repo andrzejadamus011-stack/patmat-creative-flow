@@ -104,7 +104,7 @@ export function ParticleField() {
         if (p.y < 0 || p.y > h) p.vy *= -1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(200,190,255,0.55)";
+        ctx.fillStyle = "rgba(214,178,142,0.55)";
         ctx.fill();
       }
       for (let i = 0; i < pts.length; i++) {
@@ -116,7 +116,7 @@ export function ParticleField() {
           const d2 = dx * dx + dy * dy;
           if (d2 < 15000) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(150,140,255,${(1 - d2 / 15000) * 0.22})`;
+            ctx.strokeStyle = `rgba(190,140,100,${(1 - d2 / 15000) * 0.26})`;
             ctx.lineWidth = 0.7;
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
