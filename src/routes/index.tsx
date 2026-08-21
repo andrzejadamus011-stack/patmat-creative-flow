@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import logoFull from "@/assets/logo-patmat.png.asset.json";
 import logoMini from "@/assets/logo-patmat-mini.jpg.asset.json";
-import { Highlight, ScrollMarker, Magnetic, Counter } from "@/components/effects";
+import { Highlight, ScrollMarker, Magnetic, Counter, BrushTrail } from "@/components/effects";
 import { useReveal } from "@/hooks/use-reveal";
 import { cn } from "@/lib/utils";
 
@@ -83,26 +83,47 @@ const NAV = [
   { label: "Kontakt", href: "#kontakt" },
 ];
 
-function Nav() {
-  const [shown, setShown] = useState(false);
+function useHeroProgress() {
+  const [p, setP] = useState(0);
   useEffect(() => {
-    const onScroll = () => setShown(window.scrollY > window.innerHeight * 0.6);
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() =>
+        setP(Math.min(Math.max(window.scrollY / (window.innerHeight * 1.1), 0), 1)),
+      );
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
+  return p;
+}
+
+function Nav() {
+  const p = useHeroProgress();
+  const shown = p > 0.12;
 
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-40 border-b bg-background/85 backdrop-blur-xl transition-all duration-500",
+        "fixed inset-x-0 top-0 z-40 border-b bg-background/80 backdrop-blur-xl transition-all duration-700",
         shown
           ? "translate-y-0 border-border opacity-100"
           : "pointer-events-none -translate-y-full border-transparent opacity-0",
       )}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <a href="#top" className="flex items-center gap-2.5 font-display text-sm font-semibold">
+        <a
+          href="#top"
+          className="flex items-center gap-2.5 font-display text-sm font-semibold transition-opacity duration-500"
+          style={{ opacity: p > 0.5 ? 1 : 0 }}
+        >
           <img
             src={logoMini.url}
             alt="Logo Pat&Mat.corp"
@@ -113,20 +134,35 @@ function Nav() {
           Pat&amp;Mat<span className="-ml-2 text-muted-foreground">.corp</span>
         </a>
         <ul className="hidden items-center gap-8 md:flex">
-          {NAV.map((n) => (
+          {NAV.map((n, i) => (
             <li key={n.href}>
               <a
                 href={n.href}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                className="group relative inline-block py-1 text-sm text-muted-foreground transition-all duration-500 hover:text-foreground"
+                style={{
+                  opacity: shown ? 1 : 0,
+                  transform: shown ? "none" : "translateY(-10px)",
+                  transitionDelay: `${120 + i * 70}ms`,
+                }}
               >
                 {n.label}
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 bottom-0 h-[6px] origin-left scale-x-0 rounded-[2px] transition-transform duration-300 group-hover:scale-x-100"
+                  style={{ background: "var(--marker)", transform: "skewX(-10deg) scaleX(0)" }}
+                />
               </a>
             </li>
           ))}
         </ul>
         <a
           href="#kontakt"
-          className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-all duration-500 hover:opacity-90"
+          style={{
+            opacity: shown ? 1 : 0,
+            transform: shown ? "none" : "translateY(-10px)",
+            transitionDelay: "480ms",
+          }}
         >
           Zaczynamy <ArrowUpRight className="h-4 w-4" />
         </a>
@@ -138,50 +174,55 @@ function Nav() {
 /* ---------------- hero ---------------- */
 
 function Hero() {
-  const [p, setP] = useState(0);
-  useEffect(() => {
-    const onScroll = () => setP(Math.min(window.scrollY / (window.innerHeight * 0.8), 1));
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const p = useHeroProgress();
+  // 0 → 0.45: logo stoi w miejscu, wjeżdża menu. Potem logo odjeżdża.
+  const out = Math.min(Math.max((p - 0.45) / 0.55, 0), 1);
 
   return (
-    <section
-      id="top"
-      className="relative flex min-h-screen flex-col items-center justify-center px-6"
-    >
-      <div
-        className="w-full max-w-3xl overflow-hidden rounded-[2rem]"
-        style={{
-          opacity: 1 - p,
-          transform: `translateY(${p * -40}px) scale(${1 - p * 0.06})`,
-          background: "oklch(0.968 0.008 85)",
-        }}
-      >
-        <img
-          src={logoFull.url}
-          alt="Pat&Mat.corp — creative studio marketingowe"
-          width={1960}
-          height={780}
-          className="h-auto w-full"
-        />
-      </div>
+    <section id="top" className="relative h-[210vh]">
+      <div className="sticky top-0 flex h-screen flex-col items-center justify-center px-6">
+        <div
+          className="w-full max-w-3xl overflow-hidden rounded-[2rem]"
+          style={{
+            opacity: 1 - out,
+            transform: `translateY(${out * -70}px) scale(${1 - out * 0.12})`,
+            background: "oklch(0.968 0.008 85)",
+            transition: "transform 200ms linear, opacity 200ms linear",
+          }}
+        >
+          <img
+            src={logoFull.url}
+            alt="Pat&Mat.corp — creative studio marketingowe"
+            width={1960}
+            height={780}
+            className="h-auto w-full"
+          />
+        </div>
 
-      <p
-        className="mt-10 text-center font-mono text-[11px] uppercase tracking-[0.4em] text-muted-foreground"
-        style={{ opacity: 1 - p * 1.4 }}
-      >
-        Creative Studio · Marketing od A do Z
-      </p>
-      <div
-        aria-hidden
-        className="absolute bottom-10 left-1/2 h-10 w-px -translate-x-1/2 bg-border"
-        style={{ opacity: 1 - p * 1.6 }}
-      />
+        <p
+          className="mt-10 text-center font-mono text-[11px] uppercase tracking-[0.4em] text-muted-foreground"
+          style={{
+            opacity: 1 - out * 1.6,
+            letterSpacing: `${0.4 + p * 0.12}em`,
+            transition: "opacity 200ms linear",
+          }}
+        >
+          Creative Studio · Marketing od A do Z
+        </p>
+
+        <div
+          aria-hidden
+          className="absolute bottom-12 left-1/2 h-12 w-px -translate-x-1/2 overflow-hidden bg-border"
+          style={{ opacity: 1 - p * 2.2 }}
+        >
+          <span className="block h-4 w-px animate-bounce bg-foreground" />
+        </div>
+      </div>
     </section>
   );
 }
+
+
 
 /* ---------------- sections ---------------- */
 
@@ -470,6 +511,7 @@ function Footer() {
 function Index() {
   return (
     <main className="relative">
+      <BrushTrail />
       <ScrollMarker />
       <Nav />
       <Hero />
