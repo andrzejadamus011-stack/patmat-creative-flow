@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import logoFull from "@/assets/logo-patmat.png.asset.json";
 import logoMini from "@/assets/logo-patmat-mini.jpg.asset.json";
-import { Highlight, ScrollMarker, Magnetic, Counter } from "@/components/effects";
+import { Highlight, ScrollMarker, Magnetic, Counter, BrushTrail } from "@/components/effects";
 import { useReveal } from "@/hooks/use-reveal";
 import { cn } from "@/lib/utils";
 
@@ -511,6 +511,7 @@ function Footer() {
 function Index() {
   return (
     <main className="relative">
+      <BrushTrail />
       <ScrollMarker />
       <Nav />
       <Hero />
