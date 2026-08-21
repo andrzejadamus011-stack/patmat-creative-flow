@@ -189,11 +189,11 @@ export function BrushTrail() {
           filter="url(#brush-rough)"
           style={{
             strokeDasharray: LEN,
-            strokeDashoffset: LEN * (1 - Math.min(p * 2.2, 1)),
-            transform: `translateY(${p * 620}px) rotate(${-2 + p * 6}deg)`,
+            strokeDashoffset: LEN * (1 - p),
+            transform: `translate3d(0, ${p * 900}px, 0) rotate(${-2 + p * 6}deg)`,
             transformOrigin: "50% 50%",
-            transition: "stroke-dashoffset 200ms linear, transform 200ms linear",
             opacity: 0.55,
+            willChange: "transform, stroke-dashoffset",
           }}
         />
         <path
@@ -205,12 +205,13 @@ export function BrushTrail() {
           filter="url(#brush-rough)"
           style={{
             strokeDasharray: LEN,
-            strokeDashoffset: LEN * (1 - Math.max(0, Math.min((p - 0.25) * 2, 1))),
-            transform: `translateY(${-p * 420}px)`,
-            transition: "stroke-dashoffset 200ms linear, transform 200ms linear",
+            strokeDashoffset: LEN * (1 - p),
+            transform: `translate3d(0, ${-p * 700}px, 0)`,
             opacity: 0.4,
+            willChange: "transform, stroke-dashoffset",
           }}
         />
+
       </svg>
     </div>
   );
