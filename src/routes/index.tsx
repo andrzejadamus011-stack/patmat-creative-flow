@@ -9,8 +9,13 @@ import {
   LineChart,
   Video,
   Globe,
+  Layers,
+  Timer,
+  PiggyBank,
+  TrendingUp,
 } from "lucide-react";
-import heroOrb from "@/assets/hero-orb.jpg";
+import logoFull from "@/assets/logo-patmat.png.asset.json";
+import logoMini from "@/assets/logo-patmat-mini.jpg.asset.json";
 import {
   CursorGlow,
   ParticleField,
@@ -18,6 +23,7 @@ import {
   Magnetic,
   SplitText,
   Counter,
+  ScrollPlanet,
 } from "@/components/effects";
 import { useReveal, useScrollProgress, usePointer } from "@/hooks/use-reveal";
 import { cn } from "@/lib/utils";
@@ -29,13 +35,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Pat&Mat.corp to creative studio: strategia, branding, kampanie, content i performance marketing od A do Z. Zobacz, jak budujemy marki, które się zapamiętuje.",
+          "Pat&Mat.corp to creative studio: strategia, branding, kampanie, content i performance marketing od A do Z. Jedna firma, spójny styl, szybka realizacja i realny wzrost klientów.",
       },
       { property: "og:title", content: "Pat&Mat.corp — Creative Studio" },
       {
         property: "og:description",
         content:
-          "Strategia, branding, kampanie i performance marketing od A do Z. Creative studio Pat&Mat.corp.",
+          "Marketing od A do Z w jednym miejscu: spójny styl, krótki czas realizacji, niższe koszty i wzrost liczby klientów.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -96,7 +102,7 @@ function ProgressBar() {
 const NAV = [
   { label: "Studio", href: "#studio" },
   { label: "Usługi", href: "#uslugi" },
-  { label: "Prace", href: "#prace" },
+  { label: "Dlaczego my", href: "#dlaczego" },
   { label: "Proces", href: "#proces" },
   { label: "Kontakt", href: "#kontakt" },
 ];
@@ -120,10 +126,18 @@ function Nav() {
       >
         <a
           href="#top"
-          className="flex items-center gap-2 px-3 font-display text-sm font-semibold tracking-tight"
+          className="flex items-center gap-2.5 px-2 font-display text-sm font-semibold tracking-tight"
         >
-          <span className="bg-iris h-6 w-6 shrink-0 rounded-lg" />
-          Pat&amp;Mat<span className="text-muted-foreground">.corp</span>
+          <img
+            src={logoMini.url}
+            alt="Logo Pat&Mat.corp"
+            width={64}
+            height={64}
+            className="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-border"
+          />
+          <span className="hidden sm:inline">
+            Pat&amp;Mat<span className="text-muted-foreground">.corp</span>
+          </span>
         </a>
         <ul className="hidden items-center gap-1 md:flex">
           {NAV.map((n) => (
@@ -160,7 +174,7 @@ function Hero() {
   }, []);
 
   return (
-    <section id="top" className="noise relative overflow-hidden pb-24 pt-40">
+    <section id="top" className="noise relative overflow-hidden pb-24 pt-36">
       <div className="absolute inset-0">
         <div
           className="animate-float-slow absolute -left-40 top-10 h-[560px] w-[560px] rounded-full blur-3xl"
@@ -174,7 +188,7 @@ function Hero() {
           className="absolute -right-32 top-52 h-[480px] w-[480px] rounded-full blur-3xl"
           style={{
             background:
-              "radial-gradient(circle, color-mix(in oklab, var(--aqua) 45%, transparent), transparent 70%)",
+              "radial-gradient(circle, color-mix(in oklab, var(--amber) 40%, transparent), transparent 70%)",
             transform: `translate3d(${-x * 50}px, ${-y * 30 + scrollY * 0.06}px, 0)`,
           }}
         />
@@ -183,7 +197,21 @@ function Hero() {
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div>
-          <Eyebrow>Creative Studio · Warszawa · Global</Eyebrow>
+          <Reveal>
+            <div
+              className="glass mb-9 inline-flex w-full max-w-xl items-center justify-center rounded-3xl px-6 py-5"
+              style={{ background: "oklch(0.96 0.012 85)" }}
+            >
+              <img
+                src={logoFull.url}
+                alt="Pat&Mat.corp — creative studio marketingowe"
+                width={1960}
+                height={780}
+                className="h-auto w-full"
+              />
+            </div>
+          </Reveal>
+          <Eyebrow>Creative Studio · Marketing od A do Z</Eyebrow>
           <h1 className="mt-7 font-display text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl">
             <SplitText text="Marketing" />
             <br />
@@ -192,16 +220,16 @@ function Hero() {
             </span>
           </h1>
           <p className="mt-7 max-w-lg text-lg leading-relaxed text-muted-foreground">
-            Jesteśmy Pat&amp;Mat.corp — studio kreatywne, które zamienia strategię w ruch, obraz i
-            wynik. Od pierwszego insightu po ostatnią konwersję.
+            Cały marketing robi jedna firma — dzięki temu Twoja marka mówi jednym, spójnym głosem,
+            czekasz krócej i płacisz mniej niż za kilku osobnych wykonawców.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Magnetic>
               <a
-                href="#prace"
+                href="#kontakt"
                 className="bg-iris inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-lift)]"
               >
-                Zobacz nasze prace <ArrowUpRight className="h-4 w-4" />
+                Porozmawiajmy o wzroście <ArrowUpRight className="h-4 w-4" />
               </a>
             </Magnetic>
             <a
@@ -214,9 +242,9 @@ function Hero() {
 
           <dl className="mt-14 grid max-w-md grid-cols-3 gap-6">
             {[
-              { k: "Projektów", v: 240, s: "+" },
-              { k: "Lat na rynku", v: 11, s: "" },
-              { k: "Śr. wzrost ROAS", v: 187, s: "%" },
+              { k: "Zrealizowanych projektów", v: 120, s: "+" },
+              { k: "Marketing w jednym miejscu", v: 100, s: "%" },
+              { k: "Odpowiedź w godzinach", v: 24, s: "h" },
             ].map((s) => (
               <div key={s.k}>
                 <dt className="font-display text-3xl font-semibold">
@@ -238,25 +266,25 @@ function Hero() {
             <span className="bg-iris absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 rounded-full" />
           </div>
           <div
-            className="absolute inset-6 overflow-hidden rounded-full"
+            className="absolute inset-8 overflow-hidden rounded-full ring-1 ring-border"
             style={{
               transform: `translate3d(${(x - 0.5) * -34}px, ${(y - 0.5) * -34 + scrollY * 0.05}px, 0) rotate(${scrollY * 0.03}deg)`,
               transition: "transform 300ms cubic-bezier(0.16,1,0.3,1)",
             }}
           >
             <img
-              src={heroOrb}
-              alt="Iryzujący, płynny obiekt szklany symbolizujący kreatywność Pat&Mat.corp"
-              width={1200}
-              height={1200}
+              src={logoMini.url}
+              alt="Znak graficzny Pat&Mat.corp — planeta z pierścieniem"
+              width={860}
+              height={860}
               className="h-full w-full object-cover"
             />
           </div>
           <div className="glass absolute -bottom-4 left-0 rounded-2xl px-5 py-3 text-sm">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Live
+              Jeden zespół
             </p>
-            <p className="font-display font-semibold">14 kampanii w locie</p>
+            <p className="font-display font-semibold">Strategia → kreacja → wynik</p>
           </div>
         </div>
       </div>
@@ -295,11 +323,52 @@ function Marquee() {
   );
 }
 
+function Studio() {
+  return (
+    <section id="studio" className="relative mx-auto max-w-6xl px-6 py-28">
+      <div className="grid gap-12 lg:grid-cols-2">
+        <Reveal>
+          <Eyebrow>Studio</Eyebrow>
+          <h2 className="mt-6 font-display text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+            Świeża energia, <span className="text-iris">setki godzin praktyki</span>.
+          </h2>
+          <p className="mt-6 max-w-lg leading-relaxed text-muted-foreground">
+            Pat&amp;Mat.corp to młode creative studio z dużym portfolio zrealizowanych projektów —
+            od identyfikacji wizualnych, przez treści i wideo, po kampanie sprzedażowe. Pracujemy
+            szybko, bez korporacyjnych procedur, za to z pełną odpowiedzialnością za efekt.
+          </p>
+          <p className="mt-4 max-w-lg leading-relaxed text-muted-foreground">
+            Bierzemy na siebie cały marketing, żebyś Ty mógł zająć się prowadzeniem firmy.
+          </p>
+        </Reveal>
+        <Reveal delay={120}>
+          <TiltCard intensity={8} className="glass glow-ring h-full rounded-[2rem] p-8">
+            <ul className="relative z-10 space-y-5">
+              {[
+                "Dużo zrealizowanych projektów w różnych branżach",
+                "Pomagamy zwiększać liczbę klientów, nie tylko zasięgi",
+                "Jeden spójny styl w każdym kanale komunikacji",
+                "Krótki czas oczekiwania na materiały i poprawki",
+                "Niższy koszt niż kilku osobnych wykonawców",
+              ].map((t) => (
+                <li key={t} className="flex items-start gap-3">
+                  <span className="bg-iris mt-2 h-2 w-2 shrink-0 rounded-full" />
+                  <span className="text-sm leading-relaxed text-muted-foreground">{t}</span>
+                </li>
+              ))}
+            </ul>
+          </TiltCard>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 const SERVICES = [
   {
     icon: Compass,
     title: "Strategia & Insight",
-    desc: "Badania, pozycjonowanie marki, architektura komunikacji i mapa kanałów na 12 miesięcy.",
+    desc: "Badania, pozycjonowanie marki, architektura komunikacji i mapa kanałów na najbliższe miesiące.",
   },
   {
     icon: Palette,
@@ -309,12 +378,12 @@ const SERVICES = [
   {
     icon: Megaphone,
     title: "Kampanie 360°",
-    desc: "Od konceptu po media plan — ATL, digital, OOH i aktywacje, spięte jedną narracją.",
+    desc: "Od konceptu po media plan — digital, social, OOH i aktywacje, spięte jedną narracją.",
   },
   {
     icon: Video,
     title: "Content & Produkcja",
-    desc: "Wideo, fotografia, motion i social-first formaty produkowane w naszym studiu.",
+    desc: "Wideo, fotografia, motion i social-first formaty produkowane u nas, bez podwykonawców.",
   },
   {
     icon: LineChart,
@@ -357,79 +426,58 @@ function Services() {
   );
 }
 
-const WORK = [
+const REASONS = [
   {
-    client: "Nordvita",
-    kind: "Rebranding + kampania 360°",
-    result: "+212% rozpoznawalności",
+    icon: TrendingUp,
+    title: "Więcej klientów",
+    desc: "Działania projektujemy pod jeden cel: żeby do Twojej firmy trafiało więcej wartościowych klientów i zapytań.",
     tone: "var(--iris)",
   },
   {
-    client: "Kawa Ferox",
-    kind: "Content & social-first wideo",
-    result: "38 mln zasięgu organicznego",
+    icon: Layers,
+    title: "Spójny styl",
+    desc: "Cały marketing robi jedna firma, więc logo, strona, social media i reklamy wyglądają i brzmią jak jedna marka.",
     tone: "var(--amber)",
   },
   {
-    client: "Loop Mobility",
-    kind: "Performance & CRO",
-    result: "ROAS 6,4 w 90 dni",
+    icon: Timer,
+    title: "Krótki czas oczekiwania",
+    desc: "Bez przerzucania pracy między agencjami i freelancerami. Krótkie ścieżki decyzji, szybkie realizacje i poprawki.",
     tone: "var(--aqua)",
   },
   {
-    client: "Atelier Senn",
-    kind: "E-commerce & design system",
-    result: "+64% konwersji",
+    icon: PiggyBank,
+    title: "Realna oszczędność",
+    desc: "Jeden zespół zamiast kilku wykonawców to jedna faktura, mniej godzin koordynacji i niższy koszt całości.",
     tone: "var(--magenta)",
   },
 ];
 
-function Work() {
-  const [active, setActive] = useState<number | null>(null);
+function Reasons() {
   return (
-    <section id="prace" className="relative mx-auto max-w-6xl px-6 py-28">
+    <section id="dlaczego" className="relative mx-auto max-w-6xl px-6 py-28">
       <Reveal>
-        <Eyebrow>Wybrane prace</Eyebrow>
+        <Eyebrow>Dlaczego my</Eyebrow>
         <h2 className="mt-6 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-          Efekty, nie <span className="text-iris">slajdy</span>.
+          Wszystko w <span className="text-iris">jednym miejscu</span>.
         </h2>
       </Reveal>
 
-      <div className="mt-14 divide-y divide-border border-y border-border">
-        {WORK.map((w, i) => (
-          <Reveal key={w.client} delay={i * 60}>
-            <a
-              href="#kontakt"
-              onPointerEnter={() => setActive(i)}
-              onPointerLeave={() => setActive(null)}
-              className="group relative flex flex-col gap-2 overflow-hidden py-8 transition-[padding] duration-500 hover:pl-6 sm:flex-row sm:items-center sm:justify-between"
-            >
-              <span
-                aria-hidden
-                className="absolute inset-0 -z-10 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                style={{
-                  background: `linear-gradient(90deg, color-mix(in oklab, ${w.tone} 22%, transparent), transparent 70%)`,
-                }}
-              />
-              <div className="flex items-baseline gap-5">
-                <span className="font-mono text-xs text-muted-foreground">
-                  0{i + 1}
-                </span>
-                <h3 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-                  {w.client}
-                </h3>
-              </div>
-              <div className="flex items-center gap-6 pl-10 sm:pl-0">
-                <span className="text-sm text-muted-foreground">{w.kind}</span>
+      <div className="mt-14 grid gap-5 md:grid-cols-2">
+        {REASONS.map((r, i) => (
+          <Reveal key={r.title} delay={i * 90}>
+            <TiltCard intensity={8} className="glass h-full rounded-3xl p-8">
+              <div className="relative z-10">
                 <span
-                  className="glass-soft rounded-full px-4 py-1.5 text-xs font-semibold"
-                  style={{ color: active === i ? w.tone : undefined }}
+                  className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
+                  style={{ background: `color-mix(in oklab, ${r.tone} 28%, transparent)` }}
                 >
-                  {w.result}
+                  <r.icon className="h-5 w-5" style={{ color: r.tone }} />
                 </span>
-                <ArrowUpRight className="h-5 w-5 shrink-0 -translate-x-2 opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100" />
+                <h3 className="mt-6 font-display text-2xl font-semibold">{r.title}</h3>
+                <p className="mt-3 leading-relaxed text-muted-foreground">{r.desc}</p>
               </div>
-            </a>
+            </TiltCard>
           </Reveal>
         ))}
       </div>
@@ -438,10 +486,26 @@ function Work() {
 }
 
 const PROCESS = [
-  { n: "01", t: "Discovery", d: "Warsztat, dane, konkurencja, audyt. Wychodzimy z jasnym problemem do rozwiązania." },
-  { n: "02", t: "Strategia", d: "Pozycjonowanie, big idea, KPI i plan kanałów. Wszystko na jednej stronie." },
-  { n: "03", t: "Kreacja", d: "Design, copy, produkcja. Iterujemy szybko i testujemy na żywym ruchu." },
-  { n: "04", t: "Skalowanie", d: "Optymalizacja, automatyzacja, raporty. Co miesiąc więcej z tego samego budżetu." },
+  {
+    n: "01",
+    t: "Rozmowa",
+    d: "Poznajemy firmę, cele i grupę odbiorców. Wychodzimy z jasnym problemem do rozwiązania.",
+  },
+  {
+    n: "02",
+    t: "Strategia",
+    d: "Pozycjonowanie, big idea, KPI i plan kanałów. Wszystko na jednej stronie.",
+  },
+  {
+    n: "03",
+    t: "Kreacja",
+    d: "Design, copy, produkcja. Iterujemy szybko i testujemy na żywym ruchu.",
+  },
+  {
+    n: "04",
+    t: "Skalowanie",
+    d: "Optymalizacja, automatyzacja, raporty. Co miesiąc więcej z tego samego budżetu.",
+  },
 ];
 
 function Process() {
@@ -475,107 +539,37 @@ function Process() {
   );
 }
 
-const QUOTES = [
-  {
-    q: "Pat&Mat.corp zrobili nam rebranding i kampanię w 9 tygodni. Sprzedaż w Q1 wzrosła o 41%.",
-    a: "Julia Kwaśniak",
-    r: "CMO, Nordvita",
-  },
-  {
-    q: "Jedyna agencja, która przynosi na spotkanie zarówno moodboard, jak i model atrybucji.",
-    a: "Marek Dolny",
-    r: "Founder, Loop Mobility",
-  },
-  {
-    q: "Zero przeciągania. Kreacja na poziomie, którego nie spodziewasz się przy takim tempie.",
-    a: "Ala Rembert",
-    r: "Head of Brand, Kawa Ferox",
-  },
-];
-
-function Testimonials() {
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % QUOTES.length), 5200);
-    return () => clearInterval(t);
-  }, []);
-  return (
-    <section className="relative mx-auto max-w-4xl px-6 py-28">
-      <Reveal>
-        <div className="glass relative overflow-hidden rounded-[2.5rem] p-10 sm:p-14">
-          <div
-            aria-hidden
-            className="animate-float-slow absolute -right-20 -top-20 h-72 w-72 rounded-full blur-3xl"
-            style={{
-              background:
-                "radial-gradient(circle, color-mix(in oklab, var(--magenta) 45%, transparent), transparent 70%)",
-            }}
-          />
-          <div className="relative min-h-[190px]">
-            {QUOTES.map((q, idx) => (
-              <blockquote
-                key={q.a}
-                className={cn(
-                  "absolute inset-0 transition-all duration-700",
-                  idx === i
-                    ? "translate-y-0 opacity-100 blur-0"
-                    : "pointer-events-none translate-y-6 opacity-0 blur-sm",
-                )}
-              >
-                <p className="font-display text-2xl leading-snug sm:text-3xl">“{q.q}”</p>
-                <footer className="mt-6 text-sm text-muted-foreground">
-                  <span className="font-semibold text-foreground">{q.a}</span> — {q.r}
-                </footer>
-              </blockquote>
-            ))}
-          </div>
-          <div className="mt-8 flex gap-2">
-            {QUOTES.map((q, idx) => (
-              <button
-                key={q.a}
-                onClick={() => setI(idx)}
-                aria-label={`Opinia ${idx + 1}`}
-                className={cn(
-                  "h-1.5 rounded-full transition-all duration-500",
-                  idx === i ? "bg-iris w-10" : "w-4 bg-border",
-                )}
-              />
-            ))}
-          </div>
-        </div>
-      </Reveal>
-    </section>
-  );
-}
-
 function CTA() {
   return (
     <section id="kontakt" className="relative mx-auto max-w-5xl px-6 pb-28 pt-10">
       <Reveal>
-        <TiltCard intensity={6} className="glass glow-ring rounded-[2.5rem] p-12 text-center sm:p-20">
+        <TiltCard
+          intensity={6}
+          className="glass glow-ring rounded-[2.5rem] p-12 text-center sm:p-20"
+        >
           <div className="relative z-10">
             <Eyebrow>Kontakt</Eyebrow>
             <h2 className="mt-7 font-display text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
               Powiedz nam, co chcesz <span className="text-iris">rozkręcić</span>.
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-muted-foreground">
-              Odpowiadamy w 24 h. Pierwsza konsultacja strategiczna jest bezpłatna — wychodzisz z
-              niej z konkretnym planem, nawet jeśli nie zaczniemy współpracy.
+              Odpowiadamy w 24 h. Pierwsza konsultacja jest bezpłatna — wychodzisz z niej z
+              konkretnym planem, nawet jeśli nie zaczniemy współpracy.
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Magnetic>
                 <a
-                  href="mailto:hello@patmat.corp"
+                  href="mailto:Pat&Mat.corp.contact@gmail.com"
                   className="bg-iris inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-lift)]"
                 >
-                  hello@patmat.corp <ArrowUpRight className="h-4 w-4" />
+                  Pat&amp;Mat.corp.contact@gmail.com <ArrowUpRight className="h-4 w-4" />
                 </a>
               </Magnetic>
               <a
-                href="tel:+48555010203"
+                href="tel:+48506728042"
                 className="glass-soft rounded-full px-8 py-4 text-sm font-medium transition-colors hover:bg-secondary"
               >
-                +48 555 010 203
+                506 728 042
               </a>
             </div>
           </div>
@@ -589,8 +583,23 @@ function Footer() {
   return (
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <p className="font-display text-foreground">
-          Pat&amp;Mat<span className="text-muted-foreground">.corp</span>
+        <p className="flex items-center gap-3 font-display text-foreground">
+          <img
+            src={logoMini.url}
+            alt="Logo Pat&Mat.corp"
+            width={64}
+            height={64}
+            className="h-8 w-8 rounded-full object-cover ring-1 ring-border"
+          />
+          Pat&amp;Mat<span className="-ml-3 text-muted-foreground">.corp</span>
+        </p>
+        <p className="flex flex-wrap gap-x-5 gap-y-1">
+          <a className="hover:text-foreground" href="mailto:Pat&Mat.corp.contact@gmail.com">
+            Pat&amp;Mat.corp.contact@gmail.com
+          </a>
+          <a className="hover:text-foreground" href="tel:+48506728042">
+            506 728 042
+          </a>
         </p>
         <p>© {new Date().getFullYear()} Creative Studio. Marketing od A do Z.</p>
       </div>
@@ -603,13 +612,14 @@ function Index() {
     <main className="relative">
       <ProgressBar />
       <CursorGlow />
+      <ScrollPlanet src={logoMini.url} />
       <Nav />
       <Hero />
       <Marquee />
+      <Studio />
       <Services />
-      <Work />
+      <Reasons />
       <Process />
-      <Testimonials />
       <CTA />
       <Footer />
     </main>
