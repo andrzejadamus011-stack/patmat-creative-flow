@@ -207,9 +207,12 @@ ul {
 .brand img {
   width: 32px;
   height: 32px;
+  aspect-ratio: 1 / 1;
   border-radius: 999px;
-  object-fit: cover;
+  object-fit: contain;
+  flex: none;
 }
+
 
 .brand span {
   color: var(--muted-foreground);
@@ -327,6 +330,15 @@ ul {
   border-radius: 32px;
   background: #f7f3ec;
 }
+
+.hero__logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1960 / 780;
+  object-fit: contain;
+}
+
 
 .hero__tag {
   margin-top: 40px;
