@@ -655,3 +655,143 @@ ul {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------- optymalizacja mobilna ---------- */
+
+@media (max-width: 767px) {
+  body {
+    font-size: 15px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .wrap {
+    padding: 0 18px;
+  }
+
+  .section {
+    padding: 72px 0;
+  }
+
+  #scroll-marker {
+    height: 4px;
+  }
+
+  .nav__inner {
+    height: 56px;
+    gap: 12px;
+  }
+
+  .brand {
+    font-size: 13px;
+    min-width: 0;
+  }
+
+  .brand img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .nav .btn {
+    padding: 9px 16px;
+    font-size: 13px;
+    flex: none;
+  }
+
+  .hero {
+    height: 180vh;
+  }
+
+  .hero__sticky {
+    height: 100svh;
+    padding: 0 18px;
+  }
+
+  .hero__logo {
+    border-radius: 20px;
+  }
+
+  .hero__tag {
+    margin-top: 28px;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+  }
+
+  .hero__scroll {
+    bottom: 32px;
+    height: 36px;
+  }
+
+  .lead {
+    margin-top: 22px;
+    font-size: 16px;
+  }
+
+  .stats {
+    gap: 28px;
+    margin-top: 48px;
+    padding-top: 28px;
+  }
+
+  .stats__value {
+    font-size: 30px;
+  }
+
+  .grid-cards {
+    margin-top: 40px;
+    border-radius: 14px;
+  }
+
+  .card {
+    padding: 24px;
+  }
+
+  .reasons {
+    gap: 36px;
+    margin-top: 40px;
+  }
+
+  .steps {
+    margin-top: 40px;
+  }
+
+  .step__row {
+    padding: 24px 0;
+    gap: 10px;
+  }
+
+  .marquee__track {
+    animation-duration: 26s;
+  }
+
+  .cta__actions {
+    margin-top: 32px;
+    gap: 12px;
+  }
+
+  .cta__actions .magnetic,
+  .cta__actions .magnetic .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn--lg,
+  .btn--ghost {
+    padding: 15px 24px;
+  }
+
+  .footer__inner {
+    padding: 32px 18px;
+  }
+
+  /* lżejsze tło na słabszych urządzeniach mobilnych */
+  #brush-trail path {
+    filter: none !important;
+    stroke-width: 18;
+  }
+}
+
+@media (hover: none) {
+  .magnetic {
+    transform: none !important;
+  }
+}
