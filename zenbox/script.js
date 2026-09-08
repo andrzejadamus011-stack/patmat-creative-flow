@@ -116,18 +116,22 @@
     });
   }
 
-  /* --- magnetyczne przyciski --- */
-  document.querySelectorAll(".magnetic").forEach(function (el) {
-    el.addEventListener("pointermove", function (e) {
-      var r = el.getBoundingClientRect();
-      var x = (e.clientX - (r.left + r.width / 2)) * 0.22;
-      var y = (e.clientY - (r.top + r.height / 2)) * 0.22;
-      el.style.transform = "translate3d(" + x + "px," + y + "px,0)";
+  /* --- magnetyczne przyciski (tylko urządzenia ze wskaźnikiem) --- */
+  var hasHover = window.matchMedia && window.matchMedia("(hover: hover)").matches;
+  if (hasHover) {
+    document.querySelectorAll(".magnetic").forEach(function (el) {
+      el.addEventListener("pointermove", function (e) {
+        var r = el.getBoundingClientRect();
+        var x = (e.clientX - (r.left + r.width / 2)) * 0.22;
+        var y = (e.clientY - (r.top + r.height / 2)) * 0.22;
+        el.style.transform = "translate3d(" + x + "px," + y + "px,0)";
+      });
+      el.addEventListener("pointerleave", function () {
+        el.style.transform = "translate3d(0,0,0)";
+      });
     });
-    el.addEventListener("pointerleave", function () {
-      el.style.transform = "translate3d(0,0,0)";
-    });
-  });
+  }
+
 
   /* --- rok w stopce --- */
   var year = document.querySelector("[data-year]");
