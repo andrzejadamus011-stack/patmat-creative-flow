@@ -669,7 +669,8 @@ ul {
   }
 
   .section {
-    padding: 72px 0;
+    padding-top: 72px;
+    padding-bottom: 72px;
   }
 
   #scroll-marker {
